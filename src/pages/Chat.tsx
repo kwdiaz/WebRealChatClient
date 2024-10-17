@@ -8,8 +8,8 @@ const Chat: React.FC<ChatProps> = ({ token, selectedUser, currentUser, connectio
   const [error, setError] = useState('');
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  // Use useCallback to memoize the loadChatMessages function
-  const loadChatMessages = useCallback(async (currentUser: string, selectedUser: string) => {
+  // Memoiza la función loadChatMessages para que su referencia sea estable
+  const loadChatMessages = useCallback(async () => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/chat/messages?currentUser=${currentUser}&selectedUser=${selectedUser}`,
@@ -22,14 +22,14 @@ const Chat: React.FC<ChatProps> = ({ token, selectedUser, currentUser, connectio
       console.error('Error loading messages:', err);
       setError('Error loading messages.');
     }
-  }, [token]);
+  }, [currentUser, selectedUser, token]);
 
   useEffect(() => {
     if (connection) {
-      // Load previous chat messages
-      loadChatMessages(currentUser, selectedUser);
+      // Cargar mensajes previos del chat
+      loadChatMessages();
 
-      // Listen for incoming messages
+      // Escuchar mensajes entrantes
       connection.on('ReceiveMessage', (sender: string, recipient: string, receivedMessage: string) => {
         if (
           (sender === currentUser && recipient === selectedUser) ||
