@@ -6,8 +6,9 @@ export const useChatConnection = (username: string, token: string) => {
 
   useEffect(() => {
     if (username && token) {
+      const chatHubUrl = `${process.env.REACT_APP_API_URL}/chatHub?username=${encodeURIComponent(username)}`;
       const newConnection = new signalR.HubConnectionBuilder()
-        .withUrl(`https://localhost:7014/chatHub?username=${encodeURIComponent(username)}`, {
+        .withUrl(chatHubUrl, {
           accessTokenFactory: () => token,
         })
         .withAutomaticReconnect()

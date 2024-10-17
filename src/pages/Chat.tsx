@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import ChatProps from '../interfaces/chatPorps';
 import axios from 'axios';
 
@@ -7,6 +7,22 @@ const Chat: React.FC<ChatProps> = ({ token, selectedUser, currentUser, connectio
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  // Function to load previous chat messages
+  const loadChatMessages = useCallback(async (currentUser: string, selectedUser: string) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/chat/messages?currentUser=${currentUser}&selectedUser=${selectedUser}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setMessages(response.data.map((msg: any) => ({ sender: msg.user, text: msg.message })));
+    } catch (err) {
+      console.error('Error loading messages:', err);
+      setError('Error loading messages.');
+    }
+  }, [token]);
 
   useEffect(() => {
     if (connection) {
@@ -29,28 +45,12 @@ const Chat: React.FC<ChatProps> = ({ token, selectedUser, currentUser, connectio
         connection.off('ReceiveMessage');
       }
     };
-  }, [connection, currentUser, selectedUser]);
+  }, [connection, currentUser, selectedUser, loadChatMessages]);
 
   useEffect(() => {
     // Scroll to the bottom whenever messages are updated
     scrollToBottom();
   }, [messages]);
-
-  // Function to load previous chat messages
-  const loadChatMessages = async (currentUser: string, selectedUser: string) => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/chat/messages?currentUser=${currentUser}&selectedUser=${selectedUser}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      setMessages(response.data.map((msg: any) => ({ sender: msg.user, text: msg.message })));
-    } catch (err) {
-      console.error('Error loading messages:', err);
-      setError('Error loading messages.');
-    }
-  };
 
   // Function to send a new message
   const sendMessage = async () => {
