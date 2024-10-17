@@ -40,7 +40,7 @@ const Chat: React.FC<ChatProps> = ({ token, selectedUser, currentUser, connectio
   const loadChatMessages = async (currentUser: string, selectedUser: string) => {
     try {
       const response = await axios.get(
-        `https://localhost:7014/chat/messages?currentUser=${currentUser}&selectedUser=${selectedUser}`,
+        `${process.env.REACT_APP_API_URL}/chat/messages?currentUser=${currentUser}&selectedUser=${selectedUser}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
