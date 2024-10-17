@@ -8,7 +8,7 @@ const Chat: React.FC<ChatProps> = ({ token, selectedUser, currentUser, connectio
   const [error, setError] = useState('');
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  // Memoiza la función loadChatMessages para que su referencia sea estable
+ 
   const loadChatMessages = useCallback(async () => {
     try {
       const response = await axios.get(
@@ -24,6 +24,7 @@ const Chat: React.FC<ChatProps> = ({ token, selectedUser, currentUser, connectio
     }
   }, [currentUser, selectedUser, token]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (connection) {
       // Cargar mensajes previos del chat
