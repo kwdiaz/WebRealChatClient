@@ -8,7 +8,7 @@ const Chat: React.FC<ChatProps> = ({ token, selectedUser, currentUser, connectio
   const [error, setError] = useState('');
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  // Function to load previous chat messages
+  // Use useCallback to memoize the loadChatMessages function
   const loadChatMessages = useCallback(async (currentUser: string, selectedUser: string) => {
     try {
       const response = await axios.get(
