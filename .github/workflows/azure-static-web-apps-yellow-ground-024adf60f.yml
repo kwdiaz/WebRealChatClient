@@ -26,12 +26,12 @@ jobs:
           node-version: '18'
 
       - name: Install Dependencies
-        run: npm install
+        run: npm install --loglevel=error
         env:
           CI: false  # Desactivar warnings como errores
 
       - name: Build Application
-        run: npm run build
+        run: npm run build --loglevel=error
         env:
           CI: false  # Desactivar warnings como errores
 
