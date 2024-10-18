@@ -67,6 +67,14 @@ The client-side application has been deployed to Azure along with the backend AP
 
 This deployment ensures that the application is accessible globally, offering a seamless chat experience.
 
+- **Test Users**: Two users are already registered for testing purposes:
+
+      - Username: demo1, Password: demo1
+      
+      - Username: demo2, Password: demo2
+
+   - You can also register a new user if needed.
+
 ## Key Design Decisions
 
 ### Clean Architecture (Backend Focus)
